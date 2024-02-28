@@ -1,19 +1,22 @@
-import { Map } from "./components/map";
-import { NavBar } from "./components/navbar";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Dashboard } from "./pages/dashboard";
+import { Home } from "./pages/home";
+import { About } from "./pages/about";
+
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/about" element={<About />} />
+    </Routes>
+  );
+};
 
 export function App() {
   return (
-    <div className="max-w-7xl mx-auto min-h-screen">
-      <NavBar />
-      <div className="space-y-10">
-        <div>
-          <h1 className="text-4xl text-center">CrosSafe</h1>
-          <p className="text-center">
-            A simple app to help you cross the street safely
-          </p>
-        </div>
-        <Map />
-      </div>
-    </div>
+    <Router>
+      <AppRoutes />
+    </Router>
   );
 }

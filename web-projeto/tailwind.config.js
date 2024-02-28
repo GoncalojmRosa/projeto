@@ -5,7 +5,11 @@ export default {
     "./src/**/*.tsx"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Nunito', 'sans-serif'],
+      }
+    },
   },
   plugins: [],
 }
