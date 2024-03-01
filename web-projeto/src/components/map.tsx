@@ -1,5 +1,5 @@
 import "leaflet/dist/leaflet.css";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, CircleMarker, TileLayer, Popup } from "react-leaflet";
 import { useEffect, useState } from "react";
 import { Crosswalk, getCrosswalks } from "../services/auth";
 
@@ -27,12 +27,13 @@ export function Map() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {crosswalks.map((crosswalk) => (
-        <Marker
-          key={crosswalk.id}
-          position={[crosswalk.latitude, crosswalk.longitude]}
+        <CircleMarker
+          center={[crosswalk.latitude, crosswalk.longitude]}
+          pathOptions={{ color: "red" }}
+          radius={10}
         >
-          <Popup>{crosswalk.state}</Popup>
-        </Marker>
+          <Popup>Popup in CircleMarker</Popup>
+        </CircleMarker>
       ))}
     </MapContainer>
   );
