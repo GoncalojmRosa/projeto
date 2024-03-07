@@ -6,25 +6,51 @@ export function Dashboard() {
   return (
     <div className="max-w-7xl mx-auto min-h-screen">
       <NavBar />
-      <div className="container flex mx-auto py-24">
-        <div className="grid grid-cols-3 gap-4 h-full w-screen">
-          <div className="col-span-1 bg-green-400 rounded-md h-16 flex flex-1 items-center justify-center relative">
-            <CheckCircle2 size={20} className="absolute right-0 top-0 m-1" />
-            <span className="text-4xl">44</span>
+      <div className="container mx-auto py-8 px-4 lg:px-0">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+          Crosswalk Detection Dashboard
+        </h1>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="bg-green-200 rounded-md shadow-lg p-6 flex items-center justify-center">
+            <CheckCircle2 size={32} className="text-green-600 mr-2" />
+            <div>
+              <p className="text-lg font-semibold text-green-800">
+                Crosswalks Detected
+              </p>
+              <p className="text-3xl font-bold text-green-800">44</p>
+            </div>
           </div>
-          <div className="col-span-1 bg-yellow-400 rounded-md h-16 flex flex-1 items-center justify-center relative">
-            <AlertTriangle size={20} className="absolute right-0 top-0 m-1" />
-
-            <span className="text-4xl">33</span>
+          <div className="bg-yellow-200 rounded-md shadow-lg p-6 flex items-center justify-center">
+            <AlertTriangle size={32} className="text-yellow-600 mr-2" />
+            <div>
+              <p className="text-lg font-semibold text-yellow-800">
+                Crosswalks with Minor Damage
+              </p>
+              <p className="text-3xl font-bold text-yellow-800">33</p>
+            </div>
           </div>
-          <div className="col-span-1 bg-red-400 rounded-md h-16 flex flex-1 items-center justify-center relative">
-            <AlertOctagon size={20} className="absolute right-0 top-0 m-1" />
-
-            <span className="text-4xl">22</span>
+          <div className="bg-red-200 rounded-md shadow-lg p-6 flex items-center justify-center">
+            <AlertOctagon size={32} className="text-red-600 mr-2" />
+            <div>
+              <p className="text-lg font-semibold text-red-800">
+                Crosswalks with Major Damage
+              </p>
+              <p className="text-3xl font-bold text-red-800">22</p>
+            </div>
           </div>
-          <div className="col-span-3">
-            <Map />
+        </div>
+      </div>
+      <div className="container mx-auto py-8 px-4 lg:px-0">
+        <div className="col-span-3 mt-8 lg:mt-0">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="bg-slate-300 mb-2 p-2 rounded hover:bg-slate-400 font-semibold"
+            >
+              Report new Detection
+            </button>
           </div>
+          <Map />
         </div>
       </div>
     </div>
