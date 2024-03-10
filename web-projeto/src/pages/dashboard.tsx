@@ -1,6 +1,7 @@
 import { AlertOctagon, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Map } from "../components/map";
 import { NavBar } from "../components/navbar";
+import { NewDetection } from "@/components/new-detection";
 
 export function Dashboard() {
   return (
@@ -40,16 +41,11 @@ export function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto py-8 px-4 lg:px-0">
-        <div className="col-span-3 mt-8 lg:mt-0">
-          <div className="flex justify-end">
-            <button
-              type="button"
-              className="bg-slate-300 mb-2 p-2 rounded hover:bg-slate-400 font-semibold"
-            >
-              Report new Detection
-            </button>
-          </div>
+      <div className="container mx-auto py-8 px-4 lg:px-0 col-span-3 mt-8 lg:mt-0">
+        <div className="flex justify-end relative z-10">
+          <NewDetection />
+        </div>
+        <div className="relative z-0">
           <Map />
         </div>
       </div>
