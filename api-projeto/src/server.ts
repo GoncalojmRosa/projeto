@@ -20,8 +20,9 @@ app.register(cors, {});
 const db = getFirestore(firebase);
 
 app.get("/", async () => {
-  const crosswalk = await getDocs(collection(db, "crosswalks"));
-  const crosswalks = crosswalk.docs.map((doc) => doc.data());
+  const crosswalks = (await getDocs(collection(db, "crosswalks"))).docs.map(
+    (doc) => doc.data()
+  );
 
   return crosswalks;
 });
@@ -37,9 +38,20 @@ app.post("/crosswalk", async (request, reply) => {
 
   const { state, location } = crosswalkSchema.parse(request.body);
 
-  console.log(location);
+  const { id } = await addDoc(collection(db, "crosswalks"), {
+    state,
+    location,
+  });
 
-  return reply.status(201).send();
+  const docSnapshot = await getDoc(doc(collection(db, "crosswalks"), id));
+
+  if (docSnapshot.exists()) {
+    const addedDocument = docSnapshot.data();
+
+    return reply.status(201).send(addedDocument);
+  } else {
+    return reply.status(404).send("Document not found.");
+  }
 });
 
 app
