@@ -1,2 +1,4 @@
 python/
 videos/
+*.drawio
+node_modules/

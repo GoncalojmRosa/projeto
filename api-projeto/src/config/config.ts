@@ -9,6 +9,7 @@ const {
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
   APP_ID,
+  GEOLOCATION_API_KEY,
 } = process.env;
 
 export default {
@@ -19,5 +20,8 @@ export default {
     storageBucket: STORAGE_BUCKET,
     messagingSenderId: MESSAGING_SENDER_ID,
     appId: APP_ID,
+  },
+  geoapifyConfig: {
+    apiKey: GEOLOCATION_API_KEY,
   },
 };
