@@ -72,32 +72,82 @@ app.post(
         `https://api.geoapify.com/v1/geocode/reverse?lat=${location.latitude}&lon=${location.longitude}&apiKey=${config.geoapifyConfig.apiKey}`
       )
       .then((response) => {
-        return response.data.features[0].properties.city;
+        return response.data.features[0].properties.formatted;
       })
       .catch((error) => {
         console.error("Error getting location:", error);
         return reply.status(500).send("Internal Server Error");
       });
 
-    const { id } = await addDoc(collection(db, "crosswalks"), {
-      id: randomUUID(),
-      state,
-      location,
-      city,
-      createdAt: serverTimestamp(),
+    // Query the database to find existing detections within 5 meters of the new detection
+    const querySnapshot = await getDocs(collection(db, "crosswalks"));
+    let existingDetection = null;
+    querySnapshot.forEach((doc) => {
+      const existingLocation = doc.data().location;
+
+      const distance = calculateDistance({
+        lat1: location.latitude,
+        lon1: location.longitude,
+        lat2: existingLocation.latitude,
+        lon2: existingLocation.longitude,
+      });
+      if (distance <= 5) {
+        existingDetection = doc.ref;
+      }
     });
+    if (existingDetection) {
+      // Update existing detection
+      await updateDoc(existingDetection, {
+        state,
+        location,
+        city,
+        updatedAt: serverTimestamp(),
+      });
 
-    const docSnapshot = await getDoc(doc(collection(db, "crosswalks"), id));
+      const updatedDocument = (await getDoc(existingDetection)).data();
 
-    if (docSnapshot.exists()) {
-      const addedDocument = docSnapshot.data();
-
-      return reply.status(201).send(addedDocument);
+      return reply.status(200).send(updatedDocument);
     } else {
-      return reply.status(404).send("Document not found.");
+      // Add new detection
+      const { id } = await addDoc(collection(db, "crosswalks"), {
+        id: randomUUID(),
+        state,
+        location,
+        city,
+        createdAt: serverTimestamp(),
+      });
+
+      const newDocument = (await getDoc(doc(collection(db, "crosswalks"), id))).data();
+
+      return reply.status(201).send(newDocument);
     }
+
   }
 );
+
+
+// Function to calculate distance between two coordinates
+function calculateDistance({ lat1, lon1, lat2, lon2 }: { lat1: number, lon1: number, lat2: number, lon2: number })
+{
+  var R = 6371; // km
+  var dLat = toRad(lat2-lat1);
+  var dLon = toRad(lon2-lon1);
+  var lat1 = toRad(lat1);
+  var lat2 = toRad(lat2);
+
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c;
+  return d;
+}
+
+function toRad(value: number)
+{
+    return value * Math.PI / 180;
+}
+
+
 
 app.delete("/crosswalks/:id", async (request, reply) => {
   try {
