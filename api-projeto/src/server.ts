@@ -121,7 +121,7 @@ app.post(
         await getDoc(doc(collection(db, "crosswalks"), id))
       ).data();
 
-      return reply.status(201);
+      return reply.status(201).send(newDocument);
     }
   }
 );
